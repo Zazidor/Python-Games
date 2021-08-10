@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import os
 import pygame
 from myclasses import Snake, Fruit, Text, Score, Sprite
