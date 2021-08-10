@@ -3,7 +3,7 @@ import pygame
 
 
 class Figure():
-    # список из фигур и их расположение в пространстве
+    # список фигур и их расположение в пространстве
     FIGURES = [
         [ [ [1,1,1,1] ], [ [1],[1],[1],[1] ] ],                                                                 # I 0
         [ [ [0,1,0], [1,1,1] ], [ [1,0], [1,1], [1,0] ], [ [1,1,1], [0,1,0] ], [ [0,1], [1,1], [0,1] ] ],       # T 1
@@ -34,7 +34,7 @@ class Figure():
             self.x = 10 - len(self.figure[0])
 
     def falling(self, lvl):
-        # падение фигура, сравнивается время когда фигуру последний раз двигали вниз
+        # падение фигуры, сравнивается время когда фигуру последний раз двигали вниз
         if self.key_down:
             d_spd = 5
         else:
@@ -67,7 +67,7 @@ class Draw():
         image = pygame.Surface((20, 20))                    # содзаем "пиксель" 20 на 20 
         image.fill((0, 200, 64))                            # закрашиваем его зеленым
         pygame.draw.rect(image, (0,0,0), (1, 1, 18, 18), 1) #поверхность, цвет (x, y, ширина, высота), толщина
-        rect = image.get_rect(topleft=(x * 20, y * 20))     # прямоугольная область
+        rect = image.get_rect(topleft=(x * 20, y * 20))     # 
         surf.blit(image, rect)                              # отрисовываем
 
 
@@ -182,7 +182,7 @@ def game():
         # изменение объектов и многое др.
         # --------
         field = pygame.Surface((200, 400))
-        field.fill(BLACK)  # белая     
+        field.fill(BLACK)  #      
         pygame.draw.rect(field, WHITE, (0, 0, 200, 400), 1)
         field_rect = pygame.Rect((20, 20, 0, 0))
 
@@ -202,23 +202,23 @@ def game():
                 elif rows_deleted == 4: score += 1500
 
         # отрисовываем фигуру
-        for row in range(len(FIGURE.figure)):               # Y это
-            for col in range(len(FIGURE.figure[row])):      # Х это
+        for row in range(len(FIGURE.figure)):               # Y ось
+            for col in range(len(FIGURE.figure[row])):      # Х ось
                 if FIGURE.figure[row][col] == 1:
                     Draw.draw(field, col+FIGURE.x, row+FIGURE.y)    
 
         # отрисовываем поле с "упавшими" фигурами
-        for row in range(len(GRID.grid)):                   # Y это
-            for col in range(len(GRID.grid[row])):          # Х это
+        for row in range(len(GRID.grid)):                   # Y ось
+            for col in range(len(GRID.grid[row])):          # Х ось
                 if GRID.grid[row][col] == 1:
                     Draw.draw(field, col, row)
         
         # отрисовываем следующую фигуру
-        for row in range(len(FIGURE_NEXT.figure)):               # Y это
-            for col in range(len(FIGURE_NEXT.figure[row])):      # Х это
+        for row in range(len(FIGURE_NEXT.figure)):               # Y ось
+            for col in range(len(FIGURE_NEXT.figure[row])):      # Х ось
                 if FIGURE_NEXT.figure[row][col] == 1:
                     Draw.draw(sc, 14+col, 3+row)    
-
+        # отрисовываем текст
         txt_next.draw(sc)
         txt_score.draw(sc)
         txt_lines.draw(sc)
@@ -231,15 +231,18 @@ def game():
         sc.blit(text, (270, 270))
         text = pygame.font.Font(None, 36).render(str(level), True, color)
         sc.blit(text, (270, 350))
+        
         # отрисовываем всё на основном слое
         sc.blit(field, field_rect)
+        
         # обновление экрана
         pygame.display.update()
         clock.tick(FPS)
         
         # фигура падает
         FIGURE.falling(lvl=level)
-
+       
+        # не пора ли закончить игру?
         if FIGURE.y == 0 and check_collision_bottom(GRID, FIGURE):
             pygame.display.update()
             main_menu()
