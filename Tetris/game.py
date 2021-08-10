@@ -51,7 +51,6 @@ class Figure():
     
     def moving(self, key):
         # движение фигуры в зависимости от ввода игрока
-
         if key == 'right':
             if self.x < 10 - len(self.figure[0]): self.x += 1
             
@@ -63,7 +62,7 @@ class Draw():
     # отрисовка одного "пикселя"
     @staticmethod
     def draw(surf, x, y):
-        # метод принимает в качестве переменных поверхноить и кооодинаты Х и У
+        # метод принимает в качестве переменных поверхность и кооодинаты Х и У
         image = pygame.Surface((20, 20))                    # содзаем "пиксель" 20 на 20 
         image.fill((0, 200, 64))                            # закрашиваем его зеленым
         pygame.draw.rect(image, (0,0,0), (1, 1, 18, 18), 1) #поверхность, цвет (x, y, ширина, высота), толщина
@@ -116,13 +115,13 @@ class Text(pygame.sprite.Sprite):
 
 # -------------------------------------------------------- #
 
-def check_collision_bottom(GRID, FIGURE):
+def check_collision_bottom():
     # проверяем находится ли фигура на дне
     if FIGURE.y == 20 - len(FIGURE.figure):
         return True
     # проверяем столкновение с "упавшими фигурами"
-    for row in range(len(FIGURE.figure)):               # Y это
-        for col in range(len(FIGURE.figure[row])):      # Х это
+    for row in range(len(FIGURE.figure)):               # Y ось
+        for col in range(len(FIGURE.figure[row])):      # Х ось
             # проверяем только "существующие" "пиксели"
             if FIGURE.figure[row][col] == 1:
                 # проверяем "пиксель" в поле
@@ -130,10 +129,10 @@ def check_collision_bottom(GRID, FIGURE):
                     return True
 
 
-def check_collision_side(GRID, FIGURE, side):
+def check_collision_side(side):
     # СДЕЛАТЬ ПРОВЕРКУ СЛЕВА И СПРАВА
-    for row in range(len(FIGURE.figure)):               # Y это
-        for col in range(len(FIGURE.figure[row])):      # Х это
+    for row in range(len(FIGURE.figure)):               # Y ось
+        for col in range(len(FIGURE.figure[row])):      # Х ось
             # проверяем только "существующие" "пиксели"
             if FIGURE.figure[row][col] == 1:
                 # убеждаемся что фигура не на краю поля
@@ -152,10 +151,6 @@ def game():
     lines = 0
     level = 0
     
-    GRID = Grid()                   # создаем поле
-    FIGURE = Figure()               # создаем первую фигуру
-    FIGURE_NEXT = Figure()          # следующая фигура 
-
     while True:
         # обработка нажатий
         for i in pygame.event.get():
@@ -182,7 +177,7 @@ def game():
         # изменение объектов и многое др.
         # --------
         field = pygame.Surface((200, 400))
-        field.fill(BLACK)  #      
+        field.fill(BLACK)  # белая     
         pygame.draw.rect(field, WHITE, (0, 0, 200, 400), 1)
         field_rect = pygame.Rect((20, 20, 0, 0))
 
@@ -218,7 +213,7 @@ def game():
             for col in range(len(FIGURE_NEXT.figure[row])):      # Х ось
                 if FIGURE_NEXT.figure[row][col] == 1:
                     Draw.draw(sc, 14+col, 3+row)    
-        # отрисовываем текст
+
         txt_next.draw(sc)
         txt_score.draw(sc)
         txt_lines.draw(sc)
@@ -231,18 +226,16 @@ def game():
         sc.blit(text, (270, 270))
         text = pygame.font.Font(None, 36).render(str(level), True, color)
         sc.blit(text, (270, 350))
-        
         # отрисовываем всё на основном слое
         sc.blit(field, field_rect)
-        
         # обновление экрана
         pygame.display.update()
         clock.tick(FPS)
         
         # фигура падает
         FIGURE.falling(lvl=level)
-       
-        # не пора ли закончить игру?
+
+        # game over
         if FIGURE.y == 0 and check_collision_bottom(GRID, FIGURE):
             pygame.display.update()
             main_menu()
@@ -320,5 +313,9 @@ if __name__ == "__main__":
     pygame.display.update()
 
     clock = pygame.time.Clock()
+
+    GRID = Grid()                   # создаем поле
+    FIGURE = Figure()               # создаем первую фигуру
+    FIGURE_NEXT = Figure()          # следующая фигура 
 
     main_menu()
